@@ -135,8 +135,7 @@ export function ProductForm() {
         localStorage.setItem("fuoye-marketplace-drafts", JSON.stringify(drafts))
         toast.success("Saved locally. Will upload when you're online.")
       } else {
-        console.log("Submitting product data:", productData)
-        // await addDoc(collection(db, "marketplace_items"), productData)
+        await addDoc(collection(db, "marketplace_items"), productData)
         toast.success("Product listed successfully!")
 
         // Reset form
