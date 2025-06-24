@@ -52,7 +52,6 @@ export const logoutUser = async () => {
 
   try {
     await signOut(auth)
-    console.log("User logged out successfully")
   } catch (error) {
     console.error("Logout failed:", error)
     throw error

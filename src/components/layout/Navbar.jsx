@@ -35,7 +35,7 @@ export function Navbar() {
         window.location.href = "/login"
       } catch (err) {
         alert("Logout failed")
-        console.log(err)
+        console.error(err)
       }
     }
   return (

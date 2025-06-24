@@ -51,6 +51,11 @@ export default function SignupPage() {
       toast.error("Password must be at least 6 characters")
       return
     }
+
+    if (!formData.email.includes("fuoye")) {
+      toast.error("email must be a fuoye student mail")
+      return
+    }
   
     setLoading(true)
   
@@ -184,8 +189,10 @@ export default function SignupPage() {
                 <label className="text-sm font-medium">Department</label>
                 <Select value={formData.department} onValueChange={(value) => handleChange("department", value)}>
                   <SelectTrigger><SelectValue placeholder="Select Department" /></SelectTrigger>
-                  <SelectContent>{departments.map((dept) => (
-                    <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  <SelectContent className="bg-slate-50" >{departments.map((dept) => (
+                    <SelectItem key={dept} value={dept}
+                    
+                    className="hover:bg-slate-200 cursor-pointer">                      {dept}</SelectItem>
                   ))}</SelectContent>
                 </Select>
               </div>
@@ -194,8 +201,11 @@ export default function SignupPage() {
                 <label className="text-sm font-medium">Level</label>
                 <Select value={formData.level} onValueChange={(value) => handleChange("level", value)}>
                   <SelectTrigger><SelectValue placeholder="Select Level" /></SelectTrigger>
-                  <SelectContent>{levels.map((lvl) => (
-                    <SelectItem key={lvl} value={lvl}>{lvl} Level</SelectItem>
+                  <SelectContent className="bg-slate-50" >{levels.map((lvl) => (
+                    <SelectItem key={lvl} value={lvl}
+                         
+                    className="hover:bg-slate-200 cursor-pointer">       
+                    {lvl} Level</SelectItem>
                   ))}</SelectContent>
                 </Select>
               </div>

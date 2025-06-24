@@ -71,7 +71,6 @@ export function MarketplaceFeed() {
       const fetchedProducts = await Promise.all(
         Docs.map(async (docSnap) => {
           const data = docSnap.data()
-          console.log(data)
           // Fetch author profile
           let author = "Anonymous"
           let authorAvatar = "/placeholder.svg?height=40&width=40"
@@ -83,7 +82,6 @@ export function MarketplaceFeed() {
               const authorData = authorSnap.data()
               author = authorData.fullName || author
               authorAvatar = authorData.profileImage || authorAvatar
-              console.log(author)
             }
           }
 
@@ -103,7 +101,6 @@ export function MarketplaceFeed() {
           }
         })
       )   
-      console.log("Fetched products:", fetchedProducts)
       if (isLoadMore) {
         setProducts((prev) => [...prev, ...fetchedProducts])
       } else {
