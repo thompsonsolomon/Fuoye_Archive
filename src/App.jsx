@@ -53,7 +53,15 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-            
+
+              <Route
+                path="/post-reel"
+                element={
+                  <ProtectedRoute>
+                    <PostReelPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/post-product"
                 element={
@@ -77,9 +85,9 @@ function App() {
               <Route
                 path="/admin"
                 element={
-                  <AdminRoute>
+                  // <AdminRoute>
                     <AdminPage />
-                  </AdminRoute>
+                  //  </AdminRoute>
                 }
               />
               {/* 404 */}
