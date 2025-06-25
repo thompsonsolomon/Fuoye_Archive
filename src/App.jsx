@@ -28,7 +28,6 @@ function App() {
   const { user } = useAuth()
 
   return (
-    <AuthProvider>
       <OfflineProvider>
         <div className="min-h-screen bg-white text-gray-900">
           <PWAInstallBanner />
@@ -112,7 +111,6 @@ function App() {
           />
         </div>
       </OfflineProvider>
-    </AuthProvider>
   )
 }
 
