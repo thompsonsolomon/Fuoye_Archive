@@ -1,5 +1,8 @@
 import { clsx } from "clsx"
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
+import { db } from "../utils/firebase"
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
@@ -110,4 +113,39 @@ export async function uploadToCloudinary(file, resourceType = "auto") {
     console.error("Cloudinary upload error:", error)
     throw error
   }
+}
+
+
+export function usePendingRoleRequests() {
+  const [pendingRequests, setPendingRequests] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const q = query(
+          collection(db, "role_requests"),
+          where("status", "==", "pending")
+        )
+
+        const snapshot = await getDocs(q)
+        const results = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+
+        setPendingRequests(results)
+      } catch (err) {
+        console.error("Failed to fetch pending role requests:", err)
+        setError("Failed to load role requests.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRequests()
+  }, [])
+
+  return { pendingRequests, loading, error }
 }

@@ -106,7 +106,7 @@ export function UserManagement() {
                     {user.role === "user" ? (
                       <DropdownMenuItem
                         onClick={() =>
-                          updateUser(user.id, { role: "user subadmin" })
+                          updateUser(user.id, { role: "subadmin" })
                         }
                       >
                         <UserCheck className="mr-2 h-4 w-4" />

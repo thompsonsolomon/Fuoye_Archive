@@ -13,6 +13,7 @@ import { useOffline } from "../../contexts/OfflineContext"
 import { useAuth } from "../../contexts/AuthContext"
 import { truncateText } from "../../utils/helpers"
 import { logoutUser } from "../../lib/api"
+import toast from "react-hot-toast"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -34,7 +35,7 @@ export function Navbar() {
       // redirect or update state as needed
       window.location.href = "/login"
     } catch (err) {
-      alert("Logout failed")
+      toast.error("Logout failed")
       console.error(err)
     }
   }
@@ -174,7 +175,7 @@ export function Navbar() {
                     onClick={() => setIsOpen(false)}
                   >
                     <ShoppingBasket className="h-5 w-5" />
-                    <span>Product</span>
+                    <span>Post Product</span>
                   </Link>
 
 

@@ -5,6 +5,7 @@ import { MessageCircle, Calendar } from "lucide-react"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
 import { useOffline } from "../../contexts/OfflineContext"
+import toast from "react-hot-toast"
 
 export function ProductCard({ product }) {
   const { isOnline } = useOffline()
@@ -13,12 +14,12 @@ export function ProductCard({ product }) {
 
   const handleWhatsAppContact = () => {
     if (!isOnline) {
-      alert("You need an internet connection to contact the seller.")
+      toast.error("You need an internet connection to contact the seller.")
       return
     }
 
     if (!product.whatsapp) {
-      alert("Seller's WhatsApp number is not available.")
+      toast.error("Seller's WhatsApp number is not available.")
       return
     }
 

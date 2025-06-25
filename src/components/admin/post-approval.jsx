@@ -21,6 +21,8 @@ import {
 import { Dialog } from "@headlessui/react"
 import { BlogCard } from "../blog/BlogCard"
 import { getUserProfile } from "../../lib/api"
+import { usePendingRoleRequests } from "../../lib/utils"
+import { RoleRequest } from "./admin-rolerequest"
 
 export function PostApproval() {
   const [pendingBlogs, setPendingBlogs] = useState([])
@@ -28,6 +30,7 @@ export function PostApproval() {
   const [modalPost, setModalPost] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const PendingRole = usePendingRoleRequests()
 
   useEffect(() => {
     const fetchPendingBlogs = async () => {
@@ -118,34 +121,9 @@ export function PostApproval() {
         <TabsList className="mb-4">
           <TabsTrigger value="blogs">Blog Posts ({pendingBlogs.length})</TabsTrigger>
           <TabsTrigger value="reels">Reels ({pendingReels.length})</TabsTrigger>
+          <TabsTrigger value="roleUpdate">UserRole ({PendingRole?.pendingRequests.length})</TabsTrigger>
+
         </TabsList>
-
-        {/* Blogs */}
-        <TabsContent value="blogs">
-          {pendingBlogs.length === 0 && <p className="text-gray-600">No pending blogs.</p>}
-          <div className="space-y-4">
-            {pendingBlogs.map(post => (
-              <div key={post.id} className="p-4 border rounded-lg flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium text-gray-900">{post.title}</h3>
-                  <p className="text-sm text-gray-600">by {post.author}</p>
-                </div>
-                <div className="flex space-x-2">
-                  <Button size="sm" variant="outline" onClick={() => setModalPost(post)}>
-                    <Eye className="h-4 w-4 mr-1" /> Preview
-                  </Button>
-                  <Button size="sm" className="fuoye-button" onClick={() => handleApprove(post.id)}>
-                    <Check className="h-4 w-4 mr-1" /> Approve
-                  </Button>
-                  <Button size="sm" variant="destructive" onClick={() => handleDecline(post.id)}>
-                    <X className="h-4 w-4 mr-1" /> Decline
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </TabsContent>
-
         {/* Reels */}
         <TabsContent value="reels">
           {pendingReels.length === 0 && <p className="text-gray-600">No pending reels.</p>}
@@ -191,6 +169,39 @@ export function PostApproval() {
             ))}
           </div>
         </TabsContent>
+        {/* Blogs */}
+        <TabsContent value="blogs">
+          {pendingBlogs.length === 0 && <p className="text-gray-600">No pending blogs.</p>}
+          <div className="space-y-4">
+            {pendingBlogs.map(post => (
+              <div key={post.id} className="p-4 border rounded-lg flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-gray-900">{post.title}</h3>
+                  <p className="text-sm text-gray-600">by {post.author}</p>
+                </div>
+                <div className="flex space-x-2">
+                  <Button size="sm" variant="outline" onClick={() => setModalPost(post)}>
+                    <Eye className="h-4 w-4 mr-1" /> Preview
+                  </Button>
+                  <Button size="sm" className="fuoye-button" onClick={() => handleApprove(post.id)}>
+                    <Check className="h-4 w-4 mr-1" /> Approve
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => handleDecline(post.id)}>
+                    <X className="h-4 w-4 mr-1" /> Decline
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* roleUpdate */}
+        <TabsContent value="roleUpdate">
+          {PendingRole?.pendingRequests.length === 0 && <p className="text-gray-600">No pending reels.</p>}
+          <RoleRequest />
+        </TabsContent>
+
+
       </Tabs>
 
       {/* Blog Preview Modal */}

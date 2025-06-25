@@ -1,20 +1,28 @@
 
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Edit, UserPlus, X, Upload } from "lucide-react"
 import { useAuth } from "../../contexts/AuthContext"
 import { db } from "../../utils/firebase"
-import { doc, updateDoc } from "firebase/firestore"
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore"
 import { Input } from "../ui/input"
 import { Dialog } from "@headlessui/react"
-import { uploadToCloudinary } from "../../lib/utils"
+import { uploadToCloudinary, usePendingRoleRequests } from "../../lib/utils"
+import toast from "react-hot-toast"
 
 export function ProfileHeader() {
   const { profile, user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [uploading, setUploading] = useState(false)
-
+  const PendingRole = usePendingRoleRequests()
+  const [IsRolePending, setIsRolePending] = useState(false)
+  useEffect(() => {
+    if (PendingRole) {
+      const pendingRequest = PendingRole.pendingRequests.find(request => request.userId === user.uid)
+      setIsRolePending(pendingRequest)
+    }
+  }, [PendingRole, user.uid])
   const [formData, setFormData] = useState({
     fullName: profile?.fullName || "",
     department: profile?.department || "",
@@ -37,11 +45,11 @@ export function ProfileHeader() {
       if (result) {
         setFormData({ ...formData, profileImage: result })
       } else {
-        alert("Failed to upload image")
+        toast.error("Failed to upload image")
       }
     } catch (err) {
       console.error("Upload failed:", err)
-      alert("Image upload failed.")
+      toast.error("Image upload failed.")
     } finally {
       setUploading(false)
     }
@@ -55,13 +63,36 @@ export function ProfileHeader() {
         level: formData.level,
         profileImage: formData.profileImage,
       })
-      alert("Profile updated successfully!")
+      toast.success("Profile updated successfully!")
       setIsEditing(false)
     } catch (err) {
       console.error("Failed to update profile:", err)
-      alert("An error occurred while updating your profile.")
+      toast.error("An error occurred while updating your profile.")
     }
   }
+
+  const handleRequestRole = async () => {
+    try {
+      await addDoc(collection(db, "role_requests"), {
+        userId: user.uid,
+        name: profile.fullName,
+        email: user.email,
+        currentRole: profile.role || "user",
+        requestedRole: "subadmin",
+        status: "pending",
+        department: profile.department || "Mathematics",
+        level: profile.level || "100",
+        profileImage: profile.profileImage || "",
+        requestedAt: serverTimestamp(),
+      })
+      setIsRolePending(true)
+      toast.success("Request submitted! Admin will review it soon.")
+    } catch (error) {
+      console.error("Error submitting role request:", error)
+      toast.error("Failed to submit request. Try again.")
+    }
+  }
+
 
   return (
     <>
@@ -87,9 +118,11 @@ export function ProfileHeader() {
                 Edit Profile
               </Button>
               {profile?.role === "user" && (
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handleRequestRole} disabled={IsRolePending}>
                   <UserPlus className="h-4 w-4 mr-2" />
-                  Request Subadmin Role
+                  {
+                    IsRolePending ? "Request Pending" : "Request Subadmin Role"
+                  }
                 </Button>
               )}
             </div>

@@ -11,7 +11,7 @@ export default function AdminPage() {
         <p className="text-gray-600">Manage users, content, and platform analytics</p>
       </div>
       <AdminStats />
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-3 gap-8">
         <UserManagement />
         <PostApproval />
       </div>
