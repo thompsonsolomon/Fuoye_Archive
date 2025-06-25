@@ -103,10 +103,10 @@ export function UserManagement() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    {user.accountType === "user" ? (
+                    {user.role === "user" ? (
                       <DropdownMenuItem
                         onClick={() =>
-                          updateUser(user.id, { accountType: "subadmin" })
+                          updateUser(user.id, { role: "user subadmin" })
                         }
                       >
                         <UserCheck className="mr-2 h-4 w-4" />
@@ -115,7 +115,7 @@ export function UserManagement() {
                     ) : (
                       <DropdownMenuItem
                         onClick={() =>
-                          updateUser(user.id, { accountType: "user" })
+                          updateUser(user.id, { role: "user" })
                         }
                       >
                         <UserCheck className="mr-2 h-4 w-4" />
@@ -123,7 +123,7 @@ export function UserManagement() {
                       </DropdownMenuItem>
                     )}
 
-                    <DropdownMenuItem
+                    {/* <DropdownMenuItem
                       className="text-red-600"
                       onClick={() =>
                         updateUser(user.id, {
@@ -136,7 +136,7 @@ export function UserManagement() {
                       {user.status === "suspended"
                         ? "Restore User"
                         : "Suspend User"}
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

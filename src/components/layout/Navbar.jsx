@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "../ui/button"
-import { Menu, X, User, LogOut, Settings, Video } from "lucide-react"
+import { Menu, X, User, LogOut, Settings, Video, ShoppingBasket } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,16 +28,16 @@ export function Navbar() {
   ]
 
   const isActive = (path) => location.pathname === path
-    const handleLogout = async () => {
-      try {
-        await logoutUser()
-        // redirect or update state as needed
-        window.location.href = "/login"
-      } catch (err) {
-        alert("Logout failed")
-        console.error(err)
-      }
+  const handleLogout = async () => {
+    try {
+      await logoutUser()
+      // redirect or update state as needed
+      window.location.href = "/login"
+    } catch (err) {
+      alert("Logout failed")
+      console.error(err)
     }
+  }
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,9 +57,8 @@ export function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-medium transition-colors ${
-                  isActive(link.href) ? "text-emerald-800" : "text-gray-700 hover:text-emerald-800"
-                }`}
+                className={`font-medium transition-colors ${isActive(link.href) ? "text-emerald-800" : "text-gray-700 hover:text-emerald-800"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -73,7 +72,7 @@ export function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="flex items-center space-x-2">
                     <User className="h-5 w-5" />
-                
+
                     <span>{profile && truncateText(profile?.fullName || profile?.email, 10)}</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -141,9 +140,8 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`font-medium transition-colors ${
-                    isActive(link.href) ? "text-emerald-800" : "text-gray-700 hover:text-emerald-800"
-                  }`}
+                  className={`font-medium transition-colors ${isActive(link.href) ? "text-emerald-800" : "text-gray-700 hover:text-emerald-800"
+                    }`}
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
@@ -169,6 +167,17 @@ export function Navbar() {
                     <Video className="h-5 w-5" />
                     <span>Create Reel</span>
                   </Link>
+                  
+                  <Link
+                    to="/post-product"
+                    className="flex items-center space-x-2 text-gray-700 hover:text-emerald-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <ShoppingBasket className="h-5 w-5" />
+                    <span>Product</span>
+                  </Link>
+
+
                   {(profile?.role === "admin" || profile?.role === "subadmin") && (
                     <Link
                       to="/post-blog"
@@ -177,6 +186,18 @@ export function Navbar() {
                     >
                       <span>Create Blog Post</span>
                     </Link>
+                  )}
+
+{profile?.role === "admin" && (
+                    <div>
+                      <Link to="/admin"
+                        className="flex items-center space-x-2 text-gray-700 hover:text-emerald-800"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        Admin Dashboard
+                      </Link>
+                    </div>
                   )}
                 </>
               )}
