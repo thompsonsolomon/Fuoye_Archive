@@ -1,6 +1,6 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
-import { AuthProvider } from "./contexts/AuthContext"
+import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { OfflineProvider } from "./contexts/OfflineContext"
 import { Navbar } from "./components/layout/Navbar"
 import { Footer } from "./components/layout/Footer"
@@ -25,6 +25,8 @@ import PostProductPage from "./pages/PostProductPage"
 import NotFoundPage from "./pages/NotFoundPage"
 
 function App() {
+  const { user } = useAuth()
+
   return (
     <AuthProvider>
       <OfflineProvider>
@@ -34,7 +36,10 @@ function App() {
           <main className="min-h-screen">
             <Routes>
               {/* Public routes */}
-              <Route path="/" element={<HomePage />} />
+              <Route
+                path="/"
+                element={user ? <Navigate to="/blog" replace /> : <HomePage />}
+              />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/blog" element={<BlogPage />} />
@@ -42,7 +47,7 @@ function App() {
               <Route path="/reels" element={<ReelsPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
               <Route path="/marketplace/:id" element={<ProductPage />} />
-           
+
 
               {/* Protected routes */}
               <Route
@@ -86,7 +91,7 @@ function App() {
                 path="/admin"
                 element={
                   // <AdminRoute>
-                    <AdminPage />
+                  <AdminPage />
                   //  </AdminRoute>
                 }
               />

@@ -3,18 +3,19 @@ import { Heart, MessageCircle, Share2, Play } from "lucide-react"
 import { Button } from "../ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useInView } from "react-intersection-observer"
-import { doc, updateDoc, increment, onSnapshot, setDoc } from "firebase/firestore"
+import { doc, updateDoc, increment, onSnapshot, setDoc, getDoc, arrayRemove, arrayUnion } from "firebase/firestore"
 import { db } from "../../utils/firebase"
 import CommentModal from "./Comment"
 import { Badge } from "../ui/badge"
+import { useAuth } from "../../contexts/AuthContext"
+import toast from "react-hot-toast"
 
 export function ReelCard({ reel, isActive, currentUser }) {
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(reel.likes || 0)
   const [playing, setPlaying] = useState(false)
-  const [muted, setMuted] = useState(true)
   const [showModal, setShowModal] = useState(false)
-
+  const { user } = useAuth()
   const videoRef = useRef(null)
   const { ref, inView } = useInView({ threshold: 0.7 })
   useEffect(() => {
@@ -23,6 +24,15 @@ export function ReelCard({ reel, isActive, currentUser }) {
     })
     return () => unsub()
   }, [reel.id])
+
+  useEffect(() => {
+    if (reel?.liked_by && user?.uid) {
+      setLiked(reel.liked_by.includes(user.uid))
+    } else {
+      setLiked(false)
+    }
+  }, [likes?.likes, user])
+
 
   useEffect(() => {
     if (videoRef.current) {
@@ -47,19 +57,34 @@ export function ReelCard({ reel, isActive, currentUser }) {
     }
   }
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !muted
-      setMuted(!muted)
-    }
-  }
-
   const handleLike = async () => {
-    const reelRef = doc(db, "reels", reel.id)
-    await updateDoc(reelRef, {
-      likes: increment(liked ? -1 : 1),
-    })
-    setLiked(!liked)
+    if (!user) {
+      toast.error("Please sign in to like posts")
+      return
+    }
+
+    const postRef = doc(db, "reels", reel.id)
+
+    try {
+      const postSnap = await getDoc(postRef)
+      const postData = postSnap.data()
+
+      const alreadyLiked = postData.liked_by?.includes(user.uid)
+      const newLikesCount = alreadyLiked ? (postData.likes_count || 1) - 1 : (postData.likes_count || 0) + 1
+
+      // Optimistically update local UI
+      setLiked(!alreadyLiked)
+      setLikes(newLikesCount)
+
+      // Push update to Firestore
+      await updateDoc(postRef, {
+        liked_by: alreadyLiked ? arrayRemove(user.uid) : arrayUnion(user.uid),
+        likes_count: newLikesCount,
+      })
+    } catch (error) {
+      console.error("Error toggling like:", error)
+      toast.error("Failed to update like")
+    }
   }
 
   return (

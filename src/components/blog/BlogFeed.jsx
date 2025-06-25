@@ -112,6 +112,7 @@ export function BlogFeed() {
             comments: post.comments_count || 0,
             createdAt: post.created_at,
             tags: post.tags || [],
+            liked_by: post.liked_by || [],
           }
         })
       )

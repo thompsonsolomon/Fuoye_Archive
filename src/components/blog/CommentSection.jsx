@@ -15,6 +15,8 @@ import {
   doc,
   serverTimestamp,
   getDoc,
+  increment,
+  updateDoc,
 } from "firebase/firestore"
 import toast from "react-hot-toast"
 
@@ -112,7 +114,10 @@ export function CommentSection({ postId }) {
         parentId: null,
         createdAt: serverTimestamp(),
       })
-
+      // ✅ Increment comment count on blog post
+      await updateDoc(doc(db, "blog_posts", postId), {
+        comments_count: increment(1),
+      })
       const author = await fetchUserProfile(user.uid)
 
       const newCommentData = {
@@ -145,6 +150,11 @@ export function CommentSection({ postId }) {
         authorId: user.uid,
         content: replyText.trim(),
         createdAt: serverTimestamp(),
+      })
+
+      // ✅ Increment comment count on blog post
+      await updateDoc(doc(db, "blog_posts", postId), {
+        comments_count: increment(1),
       })
 
       const author = await fetchUserProfile(user.uid)

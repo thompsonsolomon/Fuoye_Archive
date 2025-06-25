@@ -28,13 +28,7 @@ export function BlogCard({ post }) {
   const [likes, setLikes] = useState(post.likes || 0)
   const { user } = useAuth()
 
-
   if (!post) return null
-  useEffect(() => {
-    if (post?.liked_by && user) {
-      setLiked(post.liked_by.includes(user.uid))
-    }
-  }, [post?.liked_by, user])
 
   const handleLike = async () => {
     if (!user) {
@@ -42,34 +36,38 @@ export function BlogCard({ post }) {
       return
     }
 
-    const alreadyLiked = liked // from local state
-    const newLikesCount = alreadyLiked ? likes - 1 : likes + 1
-
-    // ✅ 1. Optimistically update UI
-    setLiked(!alreadyLiked)
-    setLikes(newLikesCount)
+    const postRef = doc(db, "blog_posts", post.id)
 
     try {
-      const postRef = doc(db, "blog_posts", post.id)
+      const postSnap = await getDoc(postRef)
+      const postData = postSnap.data()
 
-      // ✅ 2. Update Firebase in background
+      const alreadyLiked = postData.liked_by?.includes(user.uid)
+      const newLikesCount = alreadyLiked ? (postData.likes_count || 1) - 1 : (postData.likes_count || 0) + 1
+
+      // Optimistically update local UI
+      setLiked(!alreadyLiked)
+      setLikes(newLikesCount)
+
+      // Push update to Firestore
       await updateDoc(postRef, {
-        liked_by: alreadyLiked
-          ? arrayRemove(user.uid)
-          : arrayUnion(user.uid),
+        liked_by: alreadyLiked ? arrayRemove(user.uid) : arrayUnion(user.uid),
         likes_count: newLikesCount,
       })
     } catch (error) {
-      console.error("Like update failed", error)
-
-      // 🔁 3. Rollback UI if Firebase update failed
-      setLiked(alreadyLiked)
-      setLikes(alreadyLiked ? likes + 1 : likes - 1)
-      toast.error("Could not update like. Try again.")
+      console.error("Error toggling like:", error)
+      toast.error("Failed to update like")
     }
   }
 
-  return (
+  useEffect(() => {
+    if (post?.liked_by && user?.uid) {
+      setLiked(post.liked_by.includes(user.uid))
+    } else {
+      setLiked(false)
+    }
+  }, [post?.liked_by, user])
+    return (
     <article className="fuoye-card p-6 hover:shadow-lg transition-all">
       <div className="flex flex-col gap-6">
         <div className="">
@@ -130,10 +128,12 @@ export function BlogCard({ post }) {
                 <Heart className={`h-4 w-4 mr-1 ${liked ? "fill-current" : ""}`} />
                 {likes}
               </Button>
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-emerald-600">
-                <MessageCircle className="h-4 w-4 mr-1" />
-                {post.comments || 0}
-              </Button>
+              <Link to={`/blog/${post.id}`}>
+                <Button variant="ghost" size="sm" className="text-gray-500 hover:text-emerald-600">
+                  <MessageCircle className="h-4 w-4 mr-1" />
+                  {post.comments || 0}
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

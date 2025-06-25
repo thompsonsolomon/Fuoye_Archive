@@ -33,11 +33,9 @@ export function BlogPost() {
       const postSnap = await getDoc(postRef)
 
       if (!postSnap.exists()) throw new Error("Post not found")
+        // if (!id || !user?.uid) return
 
       const data = postSnap.data()
-
-
-      // if (data.status !== "published") throw new Error("Post is not published")
 
       // Optional: fetch author profile from a separate collection
       const authorRef = doc(db, "users", data.author_id)
@@ -60,7 +58,11 @@ export function BlogPost() {
 
       setPost(formattedPost)
       setLikes(formattedPost.likes)
-      setLiked(formattedPost.liked_by.includes(user.uid))
+      if (!id || !user?.uid) {
+        return
+      }else{
+        setLiked(user?.uid && formattedPost.liked_by.includes(user.uid))
+      }
     } catch (error) {
       console.error("Error fetching post:", error)
       toast.error("Failed to load post")
@@ -120,7 +122,7 @@ export function BlogPost() {
 
    useEffect(() => {
       if (!id) return
-      return () =>fetchPost()
+      fetchPost()
     }, [id, user])
   if (loading) {
     return (
