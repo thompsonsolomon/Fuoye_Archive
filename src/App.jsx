@@ -23,6 +23,7 @@ import PostBlogPage from "./pages/PostBlogPage"
 import PostReelPage from "./pages/PostReelPage"
 import PostProductPage from "./pages/PostProductPage"
 import NotFoundPage from "./pages/NotFoundPage"
+import DeviceTracker from "./lib/utils"
 
 function App() {
   const { user } = useAuth()
@@ -31,6 +32,7 @@ function App() {
       <OfflineProvider>
         <div className="min-h-screen bg-white text-gray-900">
           <PWAInstallBanner />
+          <DeviceTracker />
           <Navbar />
           <main className="min-h-screen">
             <Routes>

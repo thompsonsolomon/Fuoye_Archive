@@ -1,5 +1,5 @@
 import { clsx } from "clsx"
-import { collection, getDocs, query, where } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { db } from "../utils/firebase"
@@ -148,4 +148,53 @@ export function usePendingRoleRequests() {
   }, [])
 
   return { pendingRequests, loading, error }
+}
+
+
+
+
+
+
+
+// Generate random device ID
+const generateDeviceId = () => {
+  return 'dev-' + Math.random().toString(36).substr(2, 9)
+}
+
+export default function DeviceTracker() {
+  useEffect(() => {
+    const trackDevice = async () => {
+      const localIdKey = "fuoye-device-id"
+      let deviceId = localStorage.getItem(localIdKey)
+
+      if (!deviceId) {
+        deviceId = generateDeviceId()
+        localStorage.setItem(localIdKey, deviceId)
+      }
+
+      const deviceRef = doc(db, "device_tracking", deviceId)
+      const docSnap = await getDoc(deviceRef)
+
+      if (!docSnap.exists()) {
+        await setDoc(deviceRef, {
+          deviceId,
+          userAgent: navigator.userAgent,
+          platform: navigator.platform,
+          language: navigator.language,
+          screen: {
+            width: window.screen.width,
+            height: window.screen.height,
+          },
+          firstSeen: serverTimestamp(),
+        })
+        console.log("📡 New device tracked:", deviceId)
+      } else {
+        console.log("✅ Device already tracked:", deviceId)
+      }
+    }
+
+    trackDevice()
+  }, [])
+
+  return null // runs silently
 }
