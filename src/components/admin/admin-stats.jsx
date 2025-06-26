@@ -67,7 +67,7 @@ export function AdminStats() {
       color: "text-orange-600",
     },
     {
-      title: "Monthly Active Users",
+      title: "Active Users / Engagement",
       value: counts.activeUsers,
       change: "+23%",
       icon: TrendingUp,
