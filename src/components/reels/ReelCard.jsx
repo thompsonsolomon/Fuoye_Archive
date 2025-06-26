@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react"
 import { Heart, MessageCircle, Share2, Play, Download } from "lucide-react"
 import { Button } from "../ui/button"
@@ -29,7 +30,6 @@ export function ReelCard({ reel, isActive, currentUser }) {
     if (!video) return
   
     if (inView && isActive) {
-      console.log(isActive, inView)
       const playPromise = video.play()
       if (playPromise !== undefined) {
         playPromise

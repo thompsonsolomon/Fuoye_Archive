@@ -6,13 +6,13 @@ import { Link } from "react-router-dom"
 import { getDocs, collection, getCountFromServer } from "firebase/firestore"
 import { getUserProfile } from "../../lib/api"
 import { db } from "../../utils/firebase"
+import { useInView } from "react-intersection-observer"
 
 export function ReelsFeed() {
   const [reels, setReels] = useState([])
   const [loading, setLoading] = useState(true)
-  const [activeIndex, setActiveIndex] = useState(0)
+  // const [activeIndex, setActiveIndex] = useState(0)
   const [error, setError] = useState(null)
-
   useEffect(() => {
     loadReels()
   }, [])
@@ -87,7 +87,7 @@ export function ReelsFeed() {
       <div className="h-full w-full snap-y snap-mandatory overflow-y-scroll">
         {reels.map((reel, index) => (
           <div key={reel.id} className="h-screen w-full snap-start">
-            <ReelCard reel={reel} isActive={index === activeIndex} />
+            <ReelCard reel={reel} isActive={index} />
           </div>
         ))}
       </div>
