@@ -92,7 +92,7 @@ export function ReelsFeed() {
         ))}
       </div>
 
-      <Link to="/post-reel">
+      <Link to="/post-reel" className="hidden xl:flex">
         <Button
           className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-emerald-800 hover:bg-emerald-700 text-white shadow-lg"
           size="icon"

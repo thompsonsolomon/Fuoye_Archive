@@ -52,10 +52,10 @@ export default function SignupPage() {
       return
     }
 
-    // if (!formData.email.includes("fuoye")) {
-    //   toast.error("email must be a fuoye student mail")
-    //   return
-    // }
+    if (!formData.email.includes("fuoye")) {
+      toast.error("email must be a fuoye student mail")
+      return
+    }
   
     setLoading(true)
   
