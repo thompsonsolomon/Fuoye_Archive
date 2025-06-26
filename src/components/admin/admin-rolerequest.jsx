@@ -6,7 +6,6 @@ import { db } from "../../utils/firebase"
 
 export function RoleRequest() {
     const { pendingRequests, loading, error } = usePendingRoleRequests()
-
     if (loading) return <p>Loading pending requests...</p>
     if (error) return <p>{error}</p>
     if (pendingRequests.length === 0) return <p>No pending requests.</p>
@@ -57,7 +56,7 @@ export function RoleRequest() {
                             <p className="font-semibold text-gray-900">Department:{req.department}</p>
                             <p className="text-sm text-gray-600">Level:{req.level}</p>
                             <p className="text-xs mt-1">Requested role: <b>{req.requestedRole}</b></p>
-                            <p className="text-xs text-muted-foreground">UserID : {req.userId}</p>
+                            <p className="text-l text-muted-foreground">Number : {req?.whatsappNo}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">

@@ -17,6 +17,7 @@ export function ProfileHeader() {
   const [uploading, setUploading] = useState(false)
   const PendingRole = usePendingRoleRequests()
   const [IsRolePending, setIsRolePending] = useState(false)
+  const [openRoleContact, setOpenRoleContact] = useState(false)
   useEffect(() => {
     if (PendingRole) {
       const pendingRequest = PendingRole.pendingRequests.find(request => request.userId === user.uid)
@@ -72,6 +73,10 @@ export function ProfileHeader() {
   }
 
   const handleRequestRole = async () => {
+    if (!formData.whatsapp && !profile.whatsappNo) {
+      setOpenRoleContact(true)
+      return
+    }
     try {
       await addDoc(collection(db, "role_requests"), {
         userId: user.uid,
@@ -84,6 +89,7 @@ export function ProfileHeader() {
         level: profile.level || "100",
         profileImage: profile.profileImage || "",
         requestedAt: serverTimestamp(),
+        whatsappNo: formData.whatsapp || "",
       })
       setIsRolePending(true)
       toast.success("Request submitted! Admin will review it soon.")
@@ -175,6 +181,34 @@ export function ProfileHeader() {
 
             <Button className="w-full fuoye-button" onClick={handleUpdate} disabled={uploading}>
               {uploading ? "Uploading..." : "Save Changes"}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      <Dialog open={openRoleContact} onClose={() => setOpenRoleContact(false)} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">Contact</h2>
+            <Button variant="ghost" size="icon" onClick={() => setOpenRoleContact(false)}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          <div>
+            <h2 className="text-sm  text-gray-700 mb-3">Enter Whatsapp Number To place Request </h2>
+            <Input
+              type="text"
+              placeholder="Enter Whatsapp Number"
+              className="mb-4"
+              onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+            />
+            <Button
+              className="w-full fuoye-button"
+              onClick={handleRequestRole}
+              disabled={IsRolePending || !formData.whatsapp}
+            >
+              {IsRolePending ? "Request Pending" : "Request Subadmin Role"}
             </Button>
           </div>
         </div>
