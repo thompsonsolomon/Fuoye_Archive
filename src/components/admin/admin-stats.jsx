@@ -10,16 +10,18 @@ export function AdminStats() {
     reels: 0,
     products: 0,
     activeUsers: 0,
+    trackedUser: 0
   })
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [userSnap, postSnap, reelSnap, productSnap] = await Promise.all([
+        const [userSnap, postSnap, reelSnap, productSnap, trackedUserData] = await Promise.all([
           getCountFromServer(collection(db, "users")),
           getCountFromServer(collection(db, "blog_posts")),
           getCountFromServer(collection(db, "reels")),
           getCountFromServer(collection(db, "marketplace_items")),
+          getCountFromServer(collection(db, "device_tracking")),
         ])
 
         setCounts({
@@ -27,7 +29,8 @@ export function AdminStats() {
           posts: postSnap.data().count,
           reels: reelSnap.data().count,
           products: productSnap.data().count,
-          activeUsers: 1892, // 👈 Optional: Replace with logic for monthly active users
+          trackedUser: trackedUserData.data().count,
+          activeUsers: 1892,
         })
       } catch (error) {
         console.error("Error fetching admin stats:", error)
@@ -63,6 +66,12 @@ export function AdminStats() {
       title: "Products Listed",
       value: counts.products,
       change: "+15%",
+      icon: ShoppingBag,
+      color: "text-orange-600",
+    }, {
+      title: "Tracked Users",
+      value: counts.trackedUser,
+      change: "+10%",
       icon: ShoppingBag,
       color: "text-orange-600",
     },
