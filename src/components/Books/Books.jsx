@@ -37,7 +37,6 @@ function Books() {
   const loadBooks = async () => {
     try {
       const booksData = await getBooks()
-      console.log(booksData)
       setBooks(booksData)
       setFilteredBooks(booksData)
     } catch (error) {

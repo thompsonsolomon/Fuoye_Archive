@@ -110,7 +110,6 @@ export async function uploadToCloudinary(file, type) {
     }
 
     const data = await response.json()
-    console.log(data)
     return data.secure_url // This is the final URL of the uploaded file
   } catch (error) {
     console.error("Cloudinary upload error:", error)
@@ -143,7 +142,6 @@ export async function uploadToUploadcare(file) {
     const data = await response.json()
     const fileUUID = data.file
     const cdnUrl = `https://ucarecdn.com/${fileUUID}/`
-    console.log("Uploaded file URL:", cdnUrl)
     return cdnUrl
   } catch (error) {
     console.error("Uploadcare upload error:", error)
@@ -226,7 +224,6 @@ export default function DeviceTracker() {
           firstSeen: serverTimestamp(),
         })
       } else {
-        // console.log("✅ Device already tracked:", deviceId)
       }
     }
 
