@@ -138,7 +138,6 @@ export function BookModal({ book, isOpen, onClose, onRatingUpdate }) {
               <Download className="mr-2 h-4 w-4" />
               Download Book
             </button> */}
-            <span>{book.fileUrl}</span>
             <DownloadButton bookData={book} />
           </div>
         </div>
