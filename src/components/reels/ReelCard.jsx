@@ -13,6 +13,7 @@ import CommentModal from "./Comment"
 import { Badge } from "../ui/badge"
 import { useAuth } from "../../contexts/AuthContext"
 import toast from "react-hot-toast"
+import ReelDownloader from "./DownloadReel"
 
 export function ReelCard({ reel, isActive, currentUser }) {
   const [liked, setLiked] = useState(false)
@@ -99,7 +100,7 @@ export function ReelCard({ reel, isActive, currentUser }) {
       navigator.share({
         title: reel.caption,
         text: "Check out this reel on FUOYE Archive!",
-        url: window.location.href,
+        url: reel.videoUrl,
       }).catch(() => {})
     } else {
       navigator.clipboard.writeText(reel.videoUrl)
@@ -193,14 +194,9 @@ export function ReelCard({ reel, isActive, currentUser }) {
           >
             <Share2 className="h-5 w-5" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-10 w-10 rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70"
-            onClick={handleDownload}
-          >
-            <Download className="h-5 w-5" />
-          </Button>
+          
+
+          <ReelDownloader reel={reel}  />
         </div>
       </div>
 

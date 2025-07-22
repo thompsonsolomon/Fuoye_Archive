@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "../ui/button"
-import { Menu, X, User, LogOut, Settings, Video, ShoppingBasket } from "lucide-react"
+import { Menu, X, User, LogOut, Settings, Video, ShoppingBasket, Book, BookOpen } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ export function Navbar() {
     { href: "/", label: "Home" },
     { href: "/blog", label: "Blog" },
     { href: "/reels", label: "Reels" },
+    { href: "/books", label: "Books" },
     { href: "/marketplace", label: "Marketplace" },
   ]
 
@@ -83,7 +84,10 @@ export function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/post-product">Product</Link>
+                    <Link to="/post-product">Post Product</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/add-books">New Books</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   {profile?.role === "admin" && (
@@ -176,6 +180,15 @@ export function Navbar() {
                   >
                     <ShoppingBasket className="h-5 w-5" />
                     <span>Post Product</span>
+                  </Link>
+
+                  <Link
+                    to="/add-books"
+                    className="flex items-center space-x-2 text-gray-700 hover:text-emerald-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <BookOpen className="h-5 w-5" />
+                    <span>Add Books</span>
                   </Link>
 
 

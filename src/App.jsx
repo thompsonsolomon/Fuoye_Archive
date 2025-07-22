@@ -24,95 +24,107 @@ import PostReelPage from "./pages/PostReelPage"
 import PostProductPage from "./pages/PostProductPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import DeviceTracker from "./lib/utils"
+import Bookspage from "./pages/Bookspage"
+import AddBooksPage from "./pages/AddBooksPage"
 
 function App() {
   const { user } = useAuth()
 
   return (
-      <OfflineProvider>
-        <div className="min-h-screen bg-white text-gray-900">
-          <PWAInstallBanner />
-          <DeviceTracker />
-          <Navbar />
-          <main className="min-h-screen">
-            <Routes>
-              {/* Public routes */}
-              <Route
-                path="/"
-                element={user ? <Navigate to="/blog" replace /> : <HomePage />}
-              />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="/reels" element={<ReelsPage />} />
-              <Route path="/marketplace" element={<MarketplacePage />} />
-              <Route path="/marketplace/:id" element={<ProductPage />} />
+    <OfflineProvider>
+      <div className="min-h-screen bg-white text-gray-900">
+        <PWAInstallBanner />
+        <DeviceTracker />
+        <Navbar />
+        <main className="min-h-screen">
+          <Routes>
+            {/* Public routes */}
+            <Route
+              path="/"
+              element={user ? <Navigate to="/blog" replace /> : <HomePage />}
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
+            <Route path="/reels" element={<ReelsPage />} />
+            <Route path="/books" element={<Bookspage />} />
+            <Route path="/marketplace" element={<MarketplacePage />} />
+            <Route path="/marketplace/:id" element={<ProductPage />} />
 
 
-              {/* Protected routes */}
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
+            {/* Protected routes */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/post-reel"
-                element={
-                  <ProtectedRoute>
-                    <PostReelPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/post-product"
-                element={
-                  <ProtectedRoute>
-                    <PostProductPage />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/add-books"
+              element={
+                <ProtectedRoute>
+                  <AddBooksPage />
+                </ProtectedRoute>
+              }
+            />
 
-              {/* Admin and SubAdmin routes */}
-              <Route
-                path="/post-blog"
-                element={
-                  <ProtectedRoute requireRole={["admin", "subadmin"]}>
-                    <PostBlogPage />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/post-reel"
+              element={
+                <ProtectedRoute>
+                  <PostReelPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/post-product"
+              element={
+                <ProtectedRoute>
+                  <PostProductPage />
+                </ProtectedRoute>
+              }
+            />
 
-              {/* Admin only routes */}
-              <Route
-                path="/admin"
-                element={
-                  // <AdminRoute>
-                  <AdminPage />
-                  //  </AdminRoute>
-                }
-              />
-              {/* 404 */}
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-          <Footer />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: "#065f46",
-                color: "#fff",
-              },
-            }}
-          />
-        </div>
-      </OfflineProvider>
+            {/* Admin and SubAdmin routes */}
+            <Route
+              path="/post-blog"
+              element={
+                <ProtectedRoute requireRole={["admin", "subadmin"]}>
+                  <PostBlogPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin only routes */}
+            <Route
+              path="/admin"
+              element={
+                // <AdminRoute>
+                <AdminPage />
+                //  </AdminRoute>
+              }
+            />
+            {/* 404 */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+        <Footer />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "#065f46",
+              color: "#fff",
+            },
+          }}
+        />
+      </div>
+    </OfflineProvider>
   )
 }
 
