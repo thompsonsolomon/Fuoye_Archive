@@ -78,7 +78,7 @@ export function BookModal({ book, isOpen, onClose, onRatingUpdate }) {
             <img
               src={book.thumbnailUrl || "/placeholder.svg"}
               alt={`Cover of ${book.title}`}
-              className="object-cover w-full h-full"
+              className="object-contain w-full h-full"
               loading="lazy"
             />
           </div>
@@ -131,13 +131,6 @@ export function BookModal({ book, isOpen, onClose, onRatingUpdate }) {
               )}
             </div>
 
-            {/* <button
-              onClick={handleDownload}
-              className="w-full bg-emerald-800 text-white py-2 px-4 rounded hover:bg-emerald-700 flex items-center justify-center"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Download Book
-            </button> */}
             <DownloadButton bookData={book} />
           </div>
         </div>

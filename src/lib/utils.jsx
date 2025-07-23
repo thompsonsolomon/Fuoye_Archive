@@ -342,19 +342,6 @@ export  function DownloadButton({ bookData }) {
         setProgress(Math.floor((loaded / total) * 100))
       }
 
-      // const blob = new Blob(chunks)
-      // const url = URL.createObjectURL(blob)
-
-      // const link = document.createElement("a")
-      // link.href = url
-      // link.download = `fuoye_reel_${reel.id}.mp4`;
-      // link.click()
-      // document.body.appendChild(link)
-
-      // // Cleanup
-      // link.remove()
-      // URL.revokeObjectURL(url)
-
       const blob = new Blob(chunks);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -376,7 +363,7 @@ export  function DownloadButton({ bookData }) {
       <button
         onClick={handleDownload}
         disabled={downloading}
-        className={`w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center hover:bg-gray-800 ${
+        className={`w-full bg-green-800 text-white py-2 px-4 rounded flex items-center justify-center hover:bg-green-600 ${
           downloading ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
