@@ -1,12 +1,12 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Button } from "../ui/button"
 import { X, Download } from "lucide-react"
 
 export function PWAInstallBanner() {
+  console.log("PWA banner")
   const [showBanner, setShowBanner] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
+  const [installed, setInstalled] = useState(false)
 
   useEffect(() => {
     const handler = (e) => {
@@ -20,6 +20,18 @@ export function PWAInstallBanner() {
     return () => window.removeEventListener("beforeinstallprompt", handler)
   }, [])
 
+  useEffect(() => {
+    const downloadedApp = localStorage.getItem("downloadedApp")
+    if (downloadedApp) {
+      setInstalled(true)
+      setShowBanner(false)
+    } else {
+      setInstalled(false)
+      setShowBanner(true)
+    }
+  }, [])
+
+
   const handleInstall = async () => {
     if (!deferredPrompt) return
 
@@ -30,9 +42,11 @@ export function PWAInstallBanner() {
       setDeferredPrompt(null)
       setShowBanner(false)
     }
+    localStorage.setItem("downloadedApp", "true")
   }
 
   if (!showBanner) return null
+  if(installed) return null
 
   return (
     <div className="bg-emerald-800 text-white p-4 relative">

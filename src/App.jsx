@@ -51,8 +51,6 @@ function App() {
             <Route path="/books" element={<Bookspage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/marketplace/:id" element={<ProductPage />} />
-
-
             {/* Protected routes */}
             <Route
               path="/profile"

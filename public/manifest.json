@@ -1,0 +1,23 @@
+{
+    "name": "FUOYE Archive",
+    "short_name": "FUOYE Archive",
+    "description": "Access and install the FUOYE Archive offline.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#047857",
+    "orientation": "portrait",
+    "icons": [
+      {
+        "src": "/icon-192.png",
+        "sizes": "28x28",
+        "type": "image/png"
+      },
+      {
+        "src": "/icon-512.png",
+        "sizes": "28x28",
+        "type": "image/png"
+      }
+    ]
+  }
+  
